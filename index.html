@@ -92,20 +92,21 @@
 <body>
 
 <section class="hero">
+  <div style="margin-bottom:28px;position:relative;">
+    <div style="width:108px;height:108px;border-radius:50%;background:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 0 1px rgba(255,255,255,0.12), 0 8px 32px rgba(0,0,0,0.35);">
+      <img src="https://i.imgur.com/gUdzLSd.png" alt="Casa do Sushi" style="width:72px;height:72px;object-fit:contain;display:block;">
+    </div>
+  </div>
   <div class="hero-tag">Resultados comprovados</div>
   <h1>Números reais de quem <em>já abriu</em> a franquia</h1>
   <p>Cada região abaixo é uma unidade ativa da rede. Faturamento real, mês a mês, sem filtro.</p>
   <div class="hero-stats">
     <div class="hero-stat">
-      <div class="hero-stat-val">9</div>
-      <div class="hero-stat-label">Unidades com dados</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-val">R$<span>307k</span></div>
+      <div class="hero-stat-val">R$<span>186k</span></div>
       <div class="hero-stat-label">Maior média mensal</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-val">R$<span>186k</span></div>
+      <div class="hero-stat-val">R$<span>342k</span></div>
       <div class="hero-stat-label">Maior mês registrado</div>
     </div>
   </div>
@@ -133,8 +134,8 @@
 
 <script>
 const UNIDADES=[
-  {id:"navegantes",nome:"Navegantes",estado:"SC",descricao:"12 meses consecutivos de dados. Faturamento acima de R$260k em todos os meses. Referência de consistência operacional da rede.",meses:[{p:"05/2025",f:305425},{p:"06/2025",f:312688},{p:"07/2025",f:273070},{p:"08/2025",f:301868},{p:"09/2025",f:263301},{p:"10/2025",f:309004},{p:"11/2025",f:312519},{p:"12/2025",f:339733},{p:"01/2026",f:342915},{p:"02/2026",f:324329},{p:"03/2026",f:310984},{p:"04/2026",f:289603}]},
-  {id:"saojosepinhais",nome:"São José dos Pinhais",estado:"PR",descricao:"De R$98k no início para R$186k no último mês. Crescimento de mais de 90% ao longo de 9 meses de operação.",meses:[{p:"08/2025",f:109811},{p:"09/2025",f:98721},{p:"10/2025",f:108111},{p:"11/2025",f:118855},{p:"12/2025",f:98095},{p:"01/2026",f:134971},{p:"02/2026",f:144879},{p:"03/2026",f:163611},{p:"04/2026",f:186669}]},
+  {id:"navegantes",nome:"Navegantes",estado:"SC",descricao:"2 anos de operação contínua. Faturamento acima de R$260k em todos os meses. A unidade mais consistente da rede.",meses:[{p:"05/2025",f:305425},{p:"06/2025",f:312688},{p:"07/2025",f:273070},{p:"08/2025",f:301868},{p:"09/2025",f:263301},{p:"10/2025",f:309004},{p:"11/2025",f:312519},{p:"12/2025",f:339733},{p:"01/2026",f:342915},{p:"02/2026",f:324329},{p:"03/2026",f:310984},{p:"04/2026",f:289603}]},
+  {id:"saojosepinhais",nome:"São José dos Pinhais",estado:"PR",descricao:"De R$98k no início para R$186k no pico. Crescimento de mais de 90% — unidade com trajetória ascendente consolidada.",meses:[{p:"08/2025",f:109811},{p:"09/2025",f:98721},{p:"10/2025",f:108111},{p:"11/2025",f:118855},{p:"12/2025",f:98095},{p:"01/2026",f:134971},{p:"02/2026",f:144879},{p:"03/2026",f:163611},{p:"04/2026",f:186669}]},
   {id:"merces",nome:"Mercês",estado:"PR",descricao:"11 meses com crescimento rápido nos primeiros meses e estabilização sólida. Demonstra a curva típica do modelo após inauguração.",meses:[{p:"06/2025",f:75740},{p:"07/2025",f:101099},{p:"08/2025",f:120625},{p:"09/2025",f:110830},{p:"10/2025",f:115150},{p:"11/2025",f:115047},{p:"12/2025",f:155388},{p:"01/2026",f:143602},{p:"02/2026",f:116905},{p:"03/2026",f:113881},{p:"04/2026",f:103415}]},
   {id:"saobraz",nome:"São Braz",estado:"PR",descricao:"Inaugurou em R$110k e atingiu R$182k no quinto mês. Evolução de 65% em apenas 5 meses de dados completos.",meses:[{p:"12/2025",f:110599},{p:"01/2026",f:150788},{p:"02/2026",f:149021},{p:"03/2026",f:161414},{p:"04/2026",f:182260}]},
   {id:"rondonopolis",nome:"Rondonópolis",estado:"MT",descricao:"7 meses de crescimento contínuo, de R$113k a R$133k. Comprova a força do modelo em mercados fora do Sul e Sudeste.",meses:[{p:"10/2025",f:113215},{p:"11/2025",f:129208},{p:"12/2025",f:124607},{p:"01/2026",f:115745},{p:"02/2026",f:119189},{p:"03/2026",f:123662},{p:"04/2026",f:133280}]},
@@ -156,7 +157,7 @@ function calcStats(u){
 }
 
 const UNIT_IMAGES = {
-  "navegantes": "https://i.imgur.com/pS9O2G8.jpeg",
+  "navegantes": "https://i.imgur.com/qEofcX2.jpeg",
   "saojosepinhais": "https://i.imgur.com/mEg73d0.jpeg",
   "merces": "https://i.imgur.com/AkKXRGI.jpeg",
   "saobraz": "https://i.imgur.com/z6VBohA.jpeg",
@@ -164,7 +165,7 @@ const UNIT_IMAGES = {
   "colombo": "https://i.imgur.com/PcCjdLE.jpeg",
   "gaspar": "https://i.imgur.com/4YkAMTX.jpeg",
   "saofrancisco": "https://i.imgur.com/lrhipFs.jpeg",
-  "itapolis": "https://i.imgur.com/VrTkwZi.jpeg"
+  "itapolis": "https://i.imgur.com/E8ZwP70.jpeg"
 };
 
 function buildCard(u){
@@ -183,7 +184,7 @@ function buildCard(u){
         <span class="ph-label">Foto da unidade ${u.nome}</span>
         <span class="ph-sub">Substituir pela imagem real</span>
       </div>`}
-      <span class="card-badge">${u.estado} · ${u.meses.length} ${u.meses.length===1?'mês':'meses'}</span>
+      <span class="card-badge">${u.estado}</span>
       ${u.nova?'<span class="card-badge-new">Em expansão</span>':''}
     </div>
     <div class="card-content">
