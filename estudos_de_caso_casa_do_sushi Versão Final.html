@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultados Reais — Casa do Sushi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --red: #C0392B; --red-light: #FCEAE8;
+    --dark: #1A1A1A; --gray: #6B6B6B;
+    --gray-light: #F7F6F3; --white: #FFFFFF;
+    --accent: #E8D5B0; --border: #E8E8E4; --green: #1D6A3A;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; }
+
+  .hero { background: var(--dark); padding: 100px 40px 80px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(192,57,43,0.18) 0%, transparent 65%); }
+  .hero-tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); background: rgba(192,57,43,0.12); border: 1px solid rgba(192,57,43,0.3); padding: 6px 18px; border-radius: 100px; margin-bottom: 28px; position: relative; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px, 5.5vw, 68px); color: var(--white); line-height: 1.1; max-width: 780px; margin: 0 auto 22px; position: relative; }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero p { font-size: 17px; color: rgba(255,255,255,0.5); max-width: 500px; margin: 0 auto 52px; line-height: 1.7; position: relative; }
+  .hero-stats { display: flex; justify-content: center; gap: 56px; flex-wrap: wrap; position: relative; }
+  .hero-stat-val { font-family: 'Playfair Display', serif; font-size: 40px; color: var(--white); line-height: 1; margin-bottom: 6px; }
+  .hero-stat-val span { color: var(--red); }
+  .hero-stat-label { font-size: 11px; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  .intro-strip { background: var(--red); padding: 18px 40px; text-align: center; }
+  .intro-strip p { font-size: 14px; color: rgba(255,255,255,0.88); line-height: 1.6; }
+  .intro-strip strong { color: #fff; font-weight: 600; }
+
+  .section { padding: 80px 40px; max-width: 1280px; margin: 0 auto; }
+  .section-header { margin-bottom: 60px; }
+  .section-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; display: block; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(26px, 3.5vw, 40px); color: var(--dark); line-height: 1.2; max-width: 560px; }
+
+  .cases-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(540px, 1fr)); gap: 24px; }
+
+  .case-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: box-shadow 0.25s, transform 0.25s; }
+  .case-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); transform: translateY(-2px); }
+
+  .card-image { width: 100%; aspect-ratio: 16/7; position: relative; overflow: hidden; background: var(--gray-light); }
+  .card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .card-image-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, #EFECEA 0%, #E3DFD8 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+  .card-image-placeholder svg { opacity: 0.18; }
+  .ph-label { font-size: 11px; color: var(--gray); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.55; }
+  .ph-sub { font-size: 10px; color: var(--gray); opacity: 0.38; }
+  .card-badge { position: absolute; top: 14px; left: 14px; background: rgba(26,26,26,0.72); backdrop-filter: blur(8px); color: #fff; font-size: 11px; font-weight: 500; padding: 5px 12px; border-radius: 100px; }
+  .card-badge-new { position: absolute; top: 14px; right: 14px; background: var(--red); color: #fff; font-size: 10px; font-weight: 600; padding: 4px 10px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .card-content { padding: 28px 28px 0; }
+  .card-location { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); margin-bottom: 4px; }
+  .card-name { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--dark); line-height: 1.15; margin-bottom: 8px; }
+  .card-desc { font-size: 13px; color: var(--gray); line-height: 1.65; margin-bottom: 20px; }
+
+  .card-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  .card-metric { background: var(--gray-light); padding: 14px 16px; }
+  .card-metric-label { font-size: 10px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .card-metric-val { font-size: 18px; font-weight: 600; color: var(--dark); line-height: 1.1; }
+  .card-metric-val.green { color: var(--green); }
+
+  .card-chart-wrap { border-top: 1px solid var(--border); padding: 24px 28px 28px; }
+  .chart-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+  .chart-title { font-size: 13px; font-weight: 600; color: var(--dark); }
+  .chart-period { font-size: 11px; color: var(--gray); margin-top: 3px; }
+  .chart-container { position: relative; height: 180px; }
+
+  .divider { height: 1px; background: var(--border); }
+
+  .bottom-strip { background: var(--dark); padding: 72px 40px; text-align: center; }
+  .bottom-strip h2 { font-family: 'Playfair Display', serif; font-size: clamp(26px, 4vw, 44px); color: var(--white); margin-bottom: 14px; line-height: 1.2; }
+  .bottom-strip p { font-size: 16px; color: rgba(255,255,255,0.45); margin: 0 auto 36px; line-height: 1.65; max-width: 480px; }
+  .btn { display: inline-block; background: var(--red); color: #fff; font-size: 15px; font-weight: 600; padding: 16px 36px; border-radius: 100px; text-decoration: none; letter-spacing: 0.02em; }
+  .btn:hover { opacity: 0.88; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 70px 24px 56px; }
+    .hero-stats { gap: 32px; }
+    .section { padding: 56px 20px; }
+    .cases-grid { grid-template-columns: 1fr; }
+    .card-content { padding: 22px 20px 0; }
+    .card-chart-wrap { padding: 20px 20px 22px; }
+    .card-metrics { grid-template-columns: 1fr 1fr; }
+    .intro-strip { padding: 16px 20px; }
+    .bottom-strip { padding: 52px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-tag">Resultados comprovados</div>
+  <h1>Números reais de quem <em>já abriu</em> a franquia</h1>
+  <p>Cada container abaixo é uma unidade ativa da rede. Faturamento real, mês a mês, sem filtro.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-val">9</div>
+      <div class="hero-stat-label">Unidades com dados</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">R$<span>307k</span></div>
+      <div class="hero-stat-label">Maior média mensal</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">R$<span>186k</span></div>
+      <div class="hero-stat-label">Maior mês registrado</div>
+    </div>
+  </div>
+</section>
+
+<div class="intro-strip">
+  <p>Todas as unidades operam no <strong>modelo container</strong> — entregue pronto em 60 dias, com operação de delivery em cidades de 60 a 150 mil habitantes.</p>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag">Estudos de caso</span>
+    <h2 class="section-title">Evolução mês a mês de cada unidade da rede</h2>
+  </div>
+  <div class="cases-grid" id="casesGrid"></div>
+</div>
+
+<div class="divider"></div>
+
+<div class="bottom-strip">
+  <h2>A sua cidade pode ser a próxima.</h2>
+  <p>Cada cidade da rede tem exclusividade territorial. Quando o contrato é assinado, ela sai do mapa de disponibilidade.</p>
+  <a href="#" class="btn">Verificar disponibilidade da minha cidade →</a>
+</div>
+
+<script>
+const UNIDADES=[
+  {id:"navegantes",nome:"Navegantes",estado:"SC",descricao:"12 meses consecutivos de dados. Faturamento acima de R$260k em todos os meses. Referência de consistência operacional da rede.",meses:[{p:"05/2025",f:305425},{p:"06/2025",f:312688},{p:"07/2025",f:273070},{p:"08/2025",f:301868},{p:"09/2025",f:263301},{p:"10/2025",f:309004},{p:"11/2025",f:312519},{p:"12/2025",f:339733},{p:"01/2026",f:342915},{p:"02/2026",f:324329},{p:"03/2026",f:310984},{p:"04/2026",f:289603}]},
+  {id:"saojosepinhais",nome:"São José dos Pinhais",estado:"PR",descricao:"De R$98k no início para R$186k no último mês. Crescimento de mais de 90% ao longo de 9 meses de operação.",meses:[{p:"08/2025",f:109811},{p:"09/2025",f:98721},{p:"10/2025",f:108111},{p:"11/2025",f:118855},{p:"12/2025",f:98095},{p:"01/2026",f:134971},{p:"02/2026",f:144879},{p:"03/2026",f:163611},{p:"04/2026",f:186669}]},
+  {id:"merces",nome:"Mercês",estado:"PR",descricao:"11 meses com crescimento rápido nos primeiros meses e estabilização sólida. Demonstra a curva típica do modelo após inauguração.",meses:[{p:"06/2025",f:75740},{p:"07/2025",f:101099},{p:"08/2025",f:120625},{p:"09/2025",f:110830},{p:"10/2025",f:115150},{p:"11/2025",f:115047},{p:"12/2025",f:155388},{p:"01/2026",f:143602},{p:"02/2026",f:116905},{p:"03/2026",f:113881},{p:"04/2026",f:103415}]},
+  {id:"saobraz",nome:"São Braz",estado:"PR",descricao:"Inaugurou em R$110k e atingiu R$182k no quinto mês. Evolução de 65% em apenas 5 meses de dados completos.",meses:[{p:"12/2025",f:110599},{p:"01/2026",f:150788},{p:"02/2026",f:149021},{p:"03/2026",f:161414},{p:"04/2026",f:182260}]},
+  {id:"rondonopolis",nome:"Rondonópolis",estado:"MT",descricao:"7 meses de crescimento contínuo, de R$113k a R$133k. Comprova a força do modelo em mercados fora do Sul e Sudeste.",meses:[{p:"10/2025",f:113215},{p:"11/2025",f:129208},{p:"12/2025",f:124607},{p:"01/2026",f:115745},{p:"02/2026",f:119189},{p:"03/2026",f:123662},{p:"04/2026",f:133280}]},
+  {id:"colombo",nome:"Colombo",estado:"PR",descricao:"De R$53k no primeiro mês para estabilizar acima de R$109k. Demonstra a aceleração natural do modelo após a inauguração.",meses:[{p:"09/2025",f:53002},{p:"10/2025",f:84034},{p:"11/2025",f:90647},{p:"12/2025",f:95803},{p:"01/2026",f:110801},{p:"02/2026",f:120477},{p:"03/2026",f:109245},{p:"04/2026",f:114162}]},
+  {id:"saofrancisco",nome:"São Francisco do Sul",estado:"SC",descricao:"6 meses com faturamento estável entre R$100k e R$123k. Consistência que demonstra a solidez do modelo em cidade litorânea.",meses:[{p:"11/2025",f:123864},{p:"12/2025",f:106208},{p:"01/2026",f:117008},{p:"02/2026",f:100994},{p:"03/2026",f:103201},{p:"04/2026",f:117403}]},
+  {id:"itapolis",nome:"Itápolis",estado:"SP",descricao:"Aceleração impressionante: de R$60k no primeiro mês para R$120k no quarto. Demonstra a velocidade de maturação do modelo.",meses:[{p:"01/2026",f:60339},{p:"02/2026",f:115704},{p:"03/2026",f:117520},{p:"04/2026",f:120752}]},
+  {id:"gaspar",nome:"Gaspar",estado:"SC",nova:true,descricao:"Em início de operação. Já no segundo mês atingiu R$150k — acima da média da rede. Trajetória ascendente.",meses:[{p:"03/2026",f:102540},{p:"04/2026",f:150401}]},
+];
+
+function fmt(v){if(v>=1000000)return'R$'+(v/1000000).toFixed(1)+'M';if(v>=1000)return'R$'+Math.round(v/1000)+'k';return'R$'+Math.round(v);}
+function fmtFull(v){return'R$'+Math.round(v).toLocaleString('pt-BR');}
+
+function calcStats(u){
+  const vals=u.meses.map(m=>m.f);
+  const media=vals.reduce((a,b)=>a+b,0)/vals.length;
+  const maximo=Math.max(...vals);
+  const crescimento=vals.length>1?((vals[vals.length-1]-vals[0])/vals[0]*100):null;
+  return{media,maximo,crescimento};
+}
+
+const UNIT_IMAGES = {
+  "navegantes": "https://i.imgur.com/pS9O2G8.jpeg",
+  "saojosepinhais": "https://i.imgur.com/mEg73d0.jpeg",
+  "merces": "https://i.imgur.com/AkKXRGI.jpeg",
+  "saobraz": "https://i.imgur.com/z6VBohA.jpeg",
+  "rondonopolis": "https://i.imgur.com/QOct6cW.jpeg",
+  "colombo": "https://i.imgur.com/PcCjdLE.jpeg",
+  "gaspar": "https://i.imgur.com/4YkAMTX.jpeg",
+  "saofrancisco": "https://i.imgur.com/lrhipFs.jpeg",
+  "itapolis": "https://i.imgur.com/VrTkwZi.jpeg"
+};
+
+function buildCard(u){
+  const s=calcStats(u);
+  const crescTxt=s.crescimento!==null?(s.crescimento>=0?`+${s.crescimento.toFixed(0)}%`:`${s.crescimento.toFixed(0)}%`):null;
+  return`<div class="case-card">
+    <div class="card-image">
+      ${UNIT_IMAGES[u.id]
+        ? `<img src="${UNIT_IMAGES[u.id]}" alt="Foto da unidade ${u.nome}" style="object-position:${u.id==='gaspar'?'center 20%':'center center'}">`
+        : `<div class="card-image-placeholder">
+        <svg width="52" height="52" viewBox="0 0 64 64" fill="none">
+          <rect x="4" y="12" width="56" height="40" rx="4" stroke="#1A1A1A" stroke-width="2.5"/>
+          <circle cx="22" cy="28" r="6" stroke="#1A1A1A" stroke-width="2"/>
+          <path d="M4 44l14-12 10 10 10-14 22 16" stroke="#1A1A1A" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        <span class="ph-label">Foto da unidade ${u.nome}</span>
+        <span class="ph-sub">Substituir pela imagem real</span>
+      </div>`}
+      <span class="card-badge">${u.estado} · ${u.meses.length} ${u.meses.length===1?'mês':'meses'}</span>
+      ${u.nova?'<span class="card-badge-new">Em expansão</span>':''}
+    </div>
+    <div class="card-content">
+      <div class="card-location">${u.estado}</div>
+      <div class="card-name">${u.nome}</div>
+      <p class="card-desc">${u.descricao}</p>
+      <div class="card-metrics">
+        <div class="card-metric"><div class="card-metric-label">Média mensal</div><div class="card-metric-val green">${fmt(s.media)}</div></div>
+        <div class="card-metric"><div class="card-metric-label">Melhor mês</div><div class="card-metric-val">${fmt(s.maximo)}</div></div>
+        <div class="card-metric"><div class="card-metric-label">${crescTxt?'Evolução':'Meses'}</div><div class="card-metric-val ${crescTxt&&s.crescimento>=0?'green':''}">${crescTxt||u.meses.length}</div></div>
+      </div>
+    </div>
+    <div class="card-chart-wrap">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">Faturamento mensal</div>
+          <div class="chart-period">${u.meses[0].p}${u.meses.length>1?' — '+u.meses[u.meses.length-1].p:''}</div>
+        </div>
+      </div>
+      <div class="chart-container"><canvas id="chart-${u.id}"></canvas></div>
+    </div>
+  </div>`;
+}
+
+document.getElementById('casesGrid').innerHTML=UNIDADES.map(buildCard).join('');
+
+UNIDADES.forEach(u=>{
+  const canvas=document.getElementById('chart-'+u.id);
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const vals=u.meses.map(m=>m.f);
+  const labels=u.meses.map(m=>m.p);
+  const grad=ctx.createLinearGradient(0,0,0,180);
+  grad.addColorStop(0,'rgba(192,57,43,0.14)');
+  grad.addColorStop(1,'rgba(192,57,43,0)');
+  new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{data:vals,borderColor:'#C0392B',borderWidth:2.5,pointBackgroundColor:'#C0392B',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:vals.length<=4?6:4,pointHoverRadius:8,fill:true,backgroundColor:grad,tension:0.35}]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#1A1A1A',titleColor:'rgba(255,255,255,0.45)',bodyColor:'#fff',bodyFont:{family:'DM Sans',weight:'600',size:14},titleFont:{family:'DM Sans',size:11},padding:14,cornerRadius:8,callbacks:{label:c=>fmtFull(c.raw)}}
+      },
+      scales:{
+        x:{grid:{display:false},border:{display:false},ticks:{font:{family:'DM Sans',size:10},color:'#9CA3AF',maxRotation:0}},
+        y:{grid:{color:'#F0EFEb'},border:{display:false},ticks:{font:{family:'DM Sans',size:10},color:'#9CA3AF',callback:v=>fmt(v)}}
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>
