@@ -15,7 +15,7 @@
     --accent: #E8D5B0; --border: #E8E8E4; --green: #1D6A3A;
   }
   html { scroll-behavior: smooth; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; -webkit-overflow-scrolling: touch; }
 
   .hero { background: var(--dark); padding: 100px 40px 80px; text-align: center; position: relative; overflow: hidden; }
   .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(192,57,43,0.18) 0%, transparent 65%); }
@@ -67,6 +67,7 @@
   .chart-title { font-size: 13px; font-weight: 600; color: var(--dark); }
   .chart-period { font-size: 11px; color: var(--gray); margin-top: 3px; }
   .chart-container { position: relative; height: 180px; }
+  .chart-container canvas { touch-action: pan-y; }
 
   .divider { height: 1px; background: var(--border); }
 
@@ -225,6 +226,7 @@ UNIDADES.forEach(u=>{
     data:{labels,datasets:[{data:vals,borderColor:'#C0392B',borderWidth:2.5,pointBackgroundColor:'#C0392B',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:vals.length<=4?6:4,pointHoverRadius:8,fill:true,backgroundColor:grad,tension:0.35}]},
     options:{
       responsive:true,maintainAspectRatio:false,
+      events:['mousemove','mouseout','click','touchstart','touchmove'],
       plugins:{
         legend:{display:false},
         tooltip:{backgroundColor:'#1A1A1A',titleColor:'rgba(255,255,255,0.45)',bodyColor:'#fff',bodyFont:{family:'DM Sans',weight:'600',size:14},titleFont:{family:'DM Sans',size:11},padding:14,cornerRadius:8,callbacks:{label:c=>fmtFull(c.raw)}}
@@ -236,6 +238,24 @@ UNIDADES.forEach(u=>{
     }
   });
 });
+
+document.querySelectorAll('canvas').forEach(function(canvas){
+  canvas.addEventListener('touchstart', function(e){ e.stopPropagation(); }, {passive: true});
+  canvas.addEventListener('touchmove', function(e){ e.stopPropagation(); }, {passive: true});
+});
+
+if(typeof MutationObserver !== 'undefined'){
+  var obs = new MutationObserver(function(){
+    document.querySelectorAll('canvas').forEach(function(canvas){
+      if(!canvas._touchFixed){
+        canvas._touchFixed = true;
+        canvas.addEventListener('touchstart', function(e){ e.stopPropagation(); }, {passive: true});
+        canvas.addEventListener('touchmove', function(e){ e.stopPropagation(); }, {passive: true});
+      }
+    });
+  });
+  obs.observe(document.body, {childList: true, subtree: true});
+}
 </script>
 </body>
 </html>
